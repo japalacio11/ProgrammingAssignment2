@@ -1,15 +1,38 @@
-## Put comments here that give an overall description of what your
-## functions do
+## This function will compute a matrix and generate its inverse in a saved function
 
-## Write a short comment describing this function
+## This function is set to create the matrix and sets its inverse
 
-makeCacheMatrix <- function(x = matrix()) {
-
+makeCacheMatrix <- function(w = matrix()){
+  inv <- NULL
+  set <- function(z){
+    w <<- z
+    inv <<- NULL
+  }
+  get <- function(){x}
+  setInverse <- function(inverse){
+    inv <<- inverse
+  }
+  getInverse <- function(){inv}
+  list(set = set, get = get, setInverse = setInverse, getInverse = getInverse)
+  
 }
 
 
-## Write a short comment describing this function
 
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+## This function will store the inverse so it wont have to be computed every time
+
+cacheSolve <- function(w,...){
+  inv <- w$getInverse()
+  if(!is.null(inv)){
+    return(inv)
+  }
+  mat <- w$get()
+  inv <- solve(mat, ...)
+  w$setInverse(inv)
+  inv
 }
+EXmatrix <- makeCacheMatrix(matrix(1:4, nrow = 2, ncol=2))
+EXmatrix$get()
+EXmatrix$getInverse()
+cacheSolve(EXmatrix)
+EXmatrix$getInverse()
